@@ -1,10 +1,12 @@
-import os
 
-import cv2
-import time
 import glob
 import os
+import time
+
+import cv2
+
 from emailing import send_mail
+from threading import Thread
 
 video = cv2.VideoCapture(0)
 time.sleep(1)
@@ -52,8 +54,13 @@ while True:
     status_list = status_list[-2:]
 
     if status_list[0] == 1 and status_list[1] == 0:
-        send_mail(images_with_object)
-        clean_folder()
+        email_thread = Thread(target=send_mail, args=(images_with_object, ))
+        email_thread.daemon = True
+        clean_thread = Thread(target=clean_folder)
+        clean_thread.daemon = True
+
+        email_thread.start()
+        clean_thread.start()
 
     print(status_list)
     cv2.imshow("VIdeo", frame)
