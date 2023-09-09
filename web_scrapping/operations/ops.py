@@ -1,5 +1,10 @@
+import smtplib
+import ssl
+
 import requests
 import selectorlib
+from email.message import EmailMessage
+
 def scrape(url):
     """Scrape the page source from the URL"""
 
@@ -16,10 +21,27 @@ def extract(source):
     return value
 
 
-def send_email():
+def send_email(message):
     """send mail when upcoming tour is available"""
 
-    print("email sent")
+    host = 'smtp.gmail.com'
+    port = 465  # For SSL
+
+
+    username = "nika.patatishvili@gmail.com"
+    password = "zpabefkizjgnstdg"
+
+    reciever = "nikoloz.patatishvili@gau.edu.ge"
+
+    email_message = EmailMessage()
+    email_message["Subject"] = "New tour is available"
+    email_message.set_content(f"Hey, we just discovered new Tour in {message}!")
+    # Create a secure SSL context
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL(host, port, context=context) as server:
+        server.login(username, password)
+        server.sendmail(username, reciever, email_message.as_string())
 
 
 def store(extracted, file_name):
