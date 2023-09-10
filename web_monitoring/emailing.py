@@ -4,7 +4,7 @@ import imghdr
 from email.message import EmailMessage
 
 SENDER = "nika.patatishvili@gmail.com"
-PASSWORD = "zpabefkizjgnstdg"
+PASSWORD = ""
 
 
 def send_mail(image_path):
