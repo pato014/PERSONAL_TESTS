@@ -12,5 +12,6 @@ if __name__ == "__main__":
 
     content = ops.read(FILE_DIR)
     if extracted != "No upcoming tours" and extracted not in content:
-        ops.store(extracted, FILE_DIR)
-        ops.send_email(extracted)
+        ops.store_in_file(extracted, FILE_DIR)
+        ops.store_db(extracted)
+        ops.send_email(extracted, username="", password="", reciever="")
