@@ -4,6 +4,7 @@ import ssl
 import requests
 import selectorlib
 from email.message import EmailMessage
+from web_scrapping.conn import db_operations
 
 def scrape(url):
     """Scrape the page source from the URL"""
@@ -21,17 +22,11 @@ def extract(source):
     return value
 
 
-def send_email(message):
+def send_email(message, username, password, reciever):
     """send mail when upcoming tour is available"""
 
     host = 'smtp.gmail.com'
     port = 465  # For SSL
-
-
-    username = "nika.patatishvili@gmail.com"
-    password = "zpabefkizjgnstdg"
-
-    reciever = "nikoloz.patatishvili@gau.edu.ge"
 
     email_message = EmailMessage()
     email_message["Subject"] = "New tour is available"
@@ -44,7 +39,7 @@ def send_email(message):
         server.sendmail(username, reciever, email_message.as_string())
 
 
-def store(extracted, file_name):
+def store_in_file(extracted, file_name):
     with open(file_name, 'a') as file:
         file.write(extracted + "\n")
 
@@ -52,3 +47,10 @@ def store(extracted, file_name):
 def read(file_name):
     with open(file_name, 'r') as file:
         return file.read()
+
+
+def store_db(data: str):
+    list_data = [events for events in data.split(", ")]
+    db_operations(list_data)
+
+
